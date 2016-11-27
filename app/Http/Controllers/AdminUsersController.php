@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UsersRequest;
+use App\Photo;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
@@ -43,7 +44,24 @@ class AdminUsersController extends Controller
      */
     public function store(UsersRequest $request)
     {
-        User::create($request->all());
+
+        $input = $request->all();
+
+        //ge himo ni xa kay sa request empty man ang file
+        if ($file = $request->file('photo_id')){  //ga detect if na exists naba ni xa
+            $name = time() . $file->getClientOriginalName(); //get the name of file concat with time
+
+            $file->move('images', $name); //move ang file dd2 sa public directory dayun mag create sa directory name images
+
+            $photo = Photo::create(['file'=>$name]); //create a name of photo to the photos table to the column file
+
+            $input['photo_id'] = $photo->id; //assign a photo_id to the users table
+
+        }
+
+        $input['password'] = bcrypt($request->password); //assign the password ngad2 sa users table nga encrypt gkan ni xa sa request
+
+        User::create($input);//tanang request ge create xa
 
         return redirect('/admin/users');
 
