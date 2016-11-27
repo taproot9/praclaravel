@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UsersEditRequest;
 use App\Http\Requests\UsersRequest;
 use App\Photo;
 use App\Role;
@@ -45,7 +46,19 @@ class AdminUsersController extends Controller
     public function store(UsersRequest $request)
     {
 
-        $input = $request->all();
+        //request gali ang file dle e apil
+
+
+
+
+        if (trim($request->password) == ''){
+            $input = $request->except('password');
+        }else{
+            $input = $request->all();
+        }
+
+
+
 
         //ge himo ni xa kay sa request empty man ang file
         if ($file = $request->file('photo_id')){  //ga detect if na exists naba ni xa
@@ -87,6 +100,10 @@ class AdminUsersController extends Controller
     public function edit($id)
     {
         //
+        $user = User::findOrFail($id);
+        $roles = Role::lists('name', 'id')->all();
+
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -96,9 +113,35 @@ class AdminUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UsersEditRequest $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+
+
+        if (trim($request->password) == ''){
+            $input = $request->except('password');
+        }else{
+            $input = $request->all();
+        }
+
+        //ge himo ni xa kay sa request empty man ang file
+        if ($file = $request->file('photo_id')){  //ga detect if na exists naba ni xa
+            $name = time() . $file->getClientOriginalName(); //get the name of file concat with time
+
+            $file->move('images', $name); //move ang file dd2 sa public directory dayun mag create sa directory name images
+
+            $photo = Photo::create(['file'=>$name]); //create a name of photo to the photos table to the column file
+
+            $input['photo_id'] = $photo->id; //assign a photo_id to the users table
+
+        }
+
+        $input['password'] = bcrypt($request->password);
+
+        $user->update($input);
+
+        return redirect('/admin/users');
     }
 
     /**

@@ -24,3 +24,10 @@ Route::get('/admin', function (){
 });
 
 Route::resource('/admin/users', 'AdminUsersController');
+
+Route::get('/admin/getfile', function (){
+    $photos = \App\Photo::all();
+    foreach ($photos as $photo){
+        echo $photo->file.'<br>';
+    }
+});
