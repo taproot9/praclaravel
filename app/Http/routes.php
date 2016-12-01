@@ -11,6 +11,9 @@
 |
 */
 
+
+
+//public ni nga mga routes
 Route::get('/', function () {
     return view('welcome');
 });
@@ -23,11 +26,14 @@ Route::get('/admin', function (){
     return view('admin.index');
 });
 
-Route::resource('/admin/users', 'AdminUsersController');
+//kini nga route para admin rajud ni nga role gamit og middleware
+Route::group(['middleware'=> 'admin'],function (){
 
-Route::get('/admin/getfile', function (){
-    $photos = \App\Photo::all();
-    foreach ($photos as $photo){
-        echo $photo->file.'<br>';
-    }
+    Route::resource('/admin/users', 'AdminUsersController');
+
+    Route::resource('/admin/posts', 'AdminPostsController');
+
 });
+
+
+
