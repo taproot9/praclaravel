@@ -23,6 +23,7 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    @yield('styles')
 </head>
 
 <body id="admin-page">
@@ -137,10 +138,10 @@
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Media<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="panels-wells.html">All Media</a>
+                                <a href="{{route('admin.media.index')}}">All Media</a>
                             </li>
                             <li>
-                                <a href="buttons.html">Create Media</a>
+                                <a href="{{route('admin.media.upload')}}">Create Media</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
@@ -242,6 +243,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     {{--<h1 class="page-header">Dashboard</h1>--}}
+
                     @yield('content')
                 </div>
                 <!-- /.col-lg-12 -->
@@ -260,9 +262,9 @@
 
 <script src="{{asset('js/libs.js')}}"></script>
 
+@yield('scripts')
 
 
-@yield('footer')
 
 </body>
 

@@ -22,15 +22,17 @@ elixir(function(mix) {
         'libs/metisMenu.css',
         'libs/sb-admin-2.css',
         'libs/styles.css',
-        'libs/timeline.css'
+        'libs/timeline.css',
+        'libs/dropzone.min.css'
     ], './public/css/libs.css')
 
 
         .scripts([
-            'jquery.js',
+            'libs/jquery.js',
             'libs/bootstrap.min.js',
             'libs/bootstrap.js',
             'libs/metisMenu.js',
-            'libs/sb-admin-2.js'
+            'libs/sb-admin-2.js',
+            'libs/dropzone.min.js'
         ], './public/js/libs.js')
 });
